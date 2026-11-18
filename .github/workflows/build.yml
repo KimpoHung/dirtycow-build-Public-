@@ -1,0 +1,26 @@
+name: Build DirtyCOW ARM64
+
+on:
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Compile DirtyCOW ARM64
+        run: |
+          gcc -pthread -o dirtycow compile_arm64_linux.c
+          file dirtycow
+          ls -lh dirtycow
+      
+      - name: Upload binaries
+        uses: actions/upload-artifact@v3
+        with:
+          name: dirtycow-arm64-binary
+          path: dirtycow
+          if-no-files-found: error
